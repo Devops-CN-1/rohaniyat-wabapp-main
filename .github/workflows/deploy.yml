@@ -1,46 +1,29 @@
-name: Deploy to Server
+name: Deploy
 
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Add server to known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -p "${{ secrets.SSH_PORT }}" -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Deploy over SSH
+      - name: Deploy to server
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
           script: |
-            set -e
-            cd "${{ secrets.APP_DIR }}"
-
-            echo "[*] Git sync"
-            git fetch --all --prune
-            git reset --hard origin/main
-
-            echo "[*] Install deps"
-            npm ci || npm install
-
-            echo "[*] Build"
+            cd /var/www/html/rohanishop.net
+            git reset --hard
+            git pull origin main
+            npm install --production
             npm run build
-
-            echo "[*] PM2 reload/start"
-            pm2 describe "${{ secrets.PM2_NAME }}" >/dev/null 2>&1 \
-              && pm2 reload "${{ secrets.PM2_NAME }}" \
-              || pm2 start "npm run start" --name "${{ secrets.PM2_NAME }}" --cwd "${{ secrets.APP_DIR }}" --time
-
-            pm2 save
-            echo "✅ Deploy done."
+            pm2 restart rohanishop
 
