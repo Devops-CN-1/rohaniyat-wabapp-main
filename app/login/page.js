@@ -39,7 +39,7 @@ export default function LoginPage() {
         className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm"
       >
         <h2 className="text-3xl mb-6 font-bold text-center text-[#6C472D]">
-          Login
+          Login New
         </h2>
         <label className="block mb-1 text-[#6C472D] font-bold">Email:</label>
         <input
