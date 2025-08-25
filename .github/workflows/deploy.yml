@@ -23,4 +23,5 @@ jobs:
             cd /var/www/html/rohanishop.net
             git reset --hard
             git pull origin main
+            npm run build
             pm2 restart rohanishop
