@@ -135,7 +135,7 @@ export default function Dashboard() {
        {/* delete record confirmation modal start  */}
       {deleteStatus && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="p-6 bg-white rounded-lg text-center w-[90%] sm:w-80 shadow-lg">
+          <div className="p-6 test bg-white rounded-lg text-center w-[90%] sm:w-80 shadow-lg">
             <div className="mb-4 w-16 h-16 flex items-center justify-center mx-auto rounded-full border-[#6C472D] bg-[#EFEADF]">
               <svg
                 className="w-8 h-8 text-[#6C472D]"
